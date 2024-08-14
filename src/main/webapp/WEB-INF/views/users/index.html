@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout/users/layout::head">
+</head>
+<body>
+<th:block th:replace="/layout/users/layout::toastify"></th:block>
+<!-- Header -->
+<header th:replace="/layout/users/layout::header"></header>
+<!--<th:block th:if="${message}=='true'">-->
+<!--	<script>-->
+<!--       Toastify({-->
+<!--           text: "Đăng Nhập Thành Công",-->
+<!--           gravity: 'top',-->
+<!--           position: 'center',-->
+<!--           duration: 3000-->
+<!--       }).showToast();-->
+<!--	</script>-->
+<!--</th:block>-->
+<!--<th:block th:if="${success}=='Đặt Lịch Thành Công'">-->
+<!--	<script>-->
+<!--       Toastify({-->
+<!--           text: "Đặt Lịch Thành Công",-->
+<!--           gravity: 'top',-->
+<!--           position: 'center',-->
+<!--           duration: 3000-->
+<!--       }).showToast();-->
+<!--	</script>-->
+<!--</th:block>-->
+<main>
+	<!-- Carousel -->
+	<div class="banner">
+		<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+			<div class="carousel-inner">
+				<div class="carousel-item active">
+					<img th:src="@{/img/slide/slide-1.jpg}" class="d-block w-100" alt="..."/>
+				</div>
+				<div class="carousel-item">
+					<img th:src="@{/img/slide/slide-2.jpg}" class="d-block w-100" alt="..."/>
+				</div>
+				<div class="carousel-item">
+					<img th:src="@{/img/slide/slide-3.jpg}" class="d-block w-100" alt="..."/>
+				</div>
+			</div>
+		</div>
+
+		<div class="order-baber">
+			<h2 class="title">Đặt lịch giữ chỗ chỉ 30 giây</h2>
+			<p class="desc">Cắt xong trả tiền, hủy lịch không sao</p>
+			<form th:action="@{/order}" method="post" class="order">
+				<th:block th:if="${#ctx.session.data_user}!=null">
+					<input type="number" name="phone" placeholder="Nhập vào SĐT để đặt lịch"
+					       th:value="${session.data_user.phone}" readonly/>
+				</th:block>
+				<th:block th:unless="${#ctx.session.data_user}!=null">
+					<input type="number" name="phone" placeholder="Nhập vào SĐT để đặt lịch" required/>
+				</th:block>
+				<button type="submit">Đặt lịch ngay</button>
+			</form>
+		</div>
+	</div>
+
+	<!-- services -->
+	<div id="services" class="services">
+		<div class="container">
+			<h2 class="title">Trải nghiện dịnh vụ</h2>
+			<p class="desc">Thư giãn 30 phút và bạn sẽ tỏa sáng</p>
+			<div class="banner-user" data-aos="fade-up">
+				<img th:src="@{/img/bannerIMG.jpg}" alt="" class="image"/>
+			</div>
+			<div class="list-service">
+				<!-- item 1 -->
+				<div class="item" data-aos="fade-up">
+					<div class="over">
+						<a th:href="@{/service}"><img th:src="@{/img/listServices/item-1.jpg}" alt="item 1"/></a>
+					</div>
+					<div class="body-item">
+						<a th:href="@{/service}">
+							<strong>Cắt gội massage</strong>
+							<p class="desc">Bảng giá 2023 (Hấp dẫn)</p>
+						</a>
+					</div>
+				</div>
+				<!-- item 2 -->
+				<div class="item" data-aos="fade-up">
+					<div class="over">
+						<a th:href="@{/service}"><img th:src="@{/img/listServices/item-2.jpg}" alt="item 1"/></a>
+					</div>
+					<div class="body-item">
+						<a th:href="@{/service}">
+							<strong>Uốn nhập khẩu hàng</strong>
+							<p class="desc">Chỉ từ 287k</p>
+						</a>
+					</div>
+				</div>
+				<!-- item 3 -->
+				<div class="item" data-aos="fade-up">
+					<div class="over">
+						<a th:href="@{/service}"><img th:src="@{/img/listServices/item-3.jpg}" alt="item 1"/></a>
+					</div>
+					<div class="body-item">
+						<a th:href="@{/service}">
+							<strong>Nhuộm nhập khẩu Ý</strong>
+							<p class="desc">Giá chỉ từ 206k</p>
+						</a>
+					</div>
+				</div>
+				<!-- item 4 -->
+				<div class="item" data-aos="fade-up">
+					<div class="over">
+						<a th:href="@{/service}"><img th:src="@{/img/listServices/item-4.jpg}" alt="item 1"/></a>
+					</div>
+					<div class="body-item">
+						<a th:href="@{/service}">
+							<strong>Dịnh vụ khác</strong>
+							<p class="desc">4 Dịnh vụ khác</p>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- listen user and feedback -->
+	<div class="listenUser">
+		<div class="container">
+			<h2 class="title">Lắng nghe & tận tâm</h2>
+			<p class="desc">Thấu hiểu nhu cầu, hỗ trợ nhiệt tình</p>
+			<div class="listAdmin">
+				<!-- item 1 -->
+				<div class="item" data-aos="fade-up">
+					<div class="over">
+						<img th:src="@{/img/listen/item-1.jpg}" alt=""/>
+					</div>
+					<p class="sub-desc">Click vào nhóm 50,000 Khách hàng - Lắng nghe, chia sẻ mọi người</p>
+				</div>
+				<!-- item 2 -->
+				<div class="item" data-aos="fade-up">
+					<div class="over">
+						<img th:src="@{/img/listen/item-2.jpg}" alt=""/>
+					</div>
+					<p class="sub-desc">Click vào nhóm 50,000 Khách hàng - Lắng nghe, chia sẻ mọi người</p>
+				</div>
+				<!-- item 3 -->
+				<div class="item" data-aos="fade-up">
+					<div class="over">
+						<img th:src="@{/img/listen/item-3.jpg}" alt=""/>
+					</div>
+					<p class="sub-desc">Click vào nhóm 50,000 Khách hàng - Lắng nghe, chia sẻ mọi người</p>
+				</div>
+				<!-- item 4 -->
+				<div class="item" data-aos="fade-up">
+					<div class="over">
+						<img th:src="@{/img/listen/item-4.jpg}" alt=""/>
+					</div>
+					<p class="sub-desc">Click vào nhóm 50,000 Khách hàng - Lắng nghe, chia sẻ mọi người</p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 30 shine angels -->
+	<div id="angels" class="angels" data-aos="fade-up">
+		<h2 class="title">30 Shine's Angels</h2>
+		<p class="desc">We can choose a hot girl massage for you</p>
+		<div class="container">
+			<div class="swiper mySwiper">
+				<div class="swiper-wrapper">
+					<div class="swiper-slide">
+						<img th:src="@{/img/angels/idol-1.jpg}" alt=""/>
+						<a href="#">
+							<button type="button" class="btn btn-warning">Book Lịch Ngay</button>
+						</a>
+					</div>
+					<div class="swiper-slide">
+						<img th:src="@{/img/angels/idol-2.jpg}" alt=""/>
+						<a href="#">
+							<button type="button" class="btn btn-warning">Book Lịch Ngay</button>
+						</a>
+					</div>
+					<div class="swiper-slide">
+						<img th:src="@{/img/angels/idol-3.jpg}" alt=""/>
+						<a href="#">
+							<button type="button" class="btn btn-warning">Book Lịch Ngay</button>
+						</a>
+					</div>
+					<div class="swiper-slide">
+						<img th:src="@{/img/angels/idol-4.jpg}" alt=""/>
+						<a href="#">
+							<button type="button" class="btn btn-warning">Book Lịch Ngay</button>
+						</a>
+					</div>
+					<div class="swiper-slide">
+						<img th:src="@{/img/angels/idol-5.jpg}" alt=""/>
+						<a href="#">
+							<button type="button" class="btn btn-warning">Book Lịch Ngay</button>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- cam kết 30 shine care -->
+	<div class="care">
+		<div class="container">
+			<h2 class="title">Cam kết 30 shine Care</h2>
+			<p class="desc">
+				Sự hài lòng của anh là ưu tiên hàng đầu của 30 Shine
+			</p>
+			<div class="care-banner" data-aos="flip-left">
+				<div class="over">
+					<img th:src="@{/img/careBanner.jpg}" alt=""/>
+				</div>
+				<div class="care-info">
+					<h3>VÌ CHẤT LƯỢNG PHỤC VỤ LÀ HÀNG ĐẦU</h3>
+					<p>Áp dụng tại salon bất kỳ toàn hệ thống 30Shine</p>
+				</div>
+			</div>
+			<div class="list-feedback">
+				<!-- item 1 -->
+				<div class="item" data-aos="fade-up">
+					<div class="over">
+						<img th:src="@{/img/BH/2-care.png}" alt="item 1"/>
+					</div>
+					<div class="body-item">
+						<strong>Cắt gội massage</strong>
+						<p class="desc">Bảng giá 2023 (Hấp dẫn)</p>
+					</div>
+				</div>
+				<!-- item 2 -->
+				<div class="item" data-aos="fade-up">
+					<div class="over">
+						<img th:src="@{/img/BH/30days-care.jpg}" alt="item 1"/>
+					</div>
+					<div class="body-item">
+						<strong>Uốn nhập khẩu hàng</strong>
+						<p class="desc">Chỉ từ 287k</p>
+					</div>
+				</div>
+				<!-- item 3 -->
+				<div class="item" data-aos="fade-up">
+					<div class="over">
+						<img th:src="@{/img/BH/2-care.png}" alt="item 1"/>
+					</div>
+					<div class="body-item">
+						<strong>Nhuộm nhập khẩu Ý</strong>
+						<p class="desc">Giá chỉ từ 206k</p>
+					</div>
+				</div>
+				<!-- item 4 -->
+				<div class="item" data-aos="fade-up">
+					<div class="over">
+						<img th:src="@{/img/BH/4-care.png}" alt="item 1"/>
+					</div>
+					<div class="body-item">
+						<strong>Dịnh vụ khác</strong>
+						<p class="desc">4 Dịnh vụ khác</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- locations -->
+	<div class="locations">
+		<div class="container">
+			<h2 class="title">Tìm 30Shine gần nhất</h2>
+			<p class="desc">
+				Để xe thuận tiện an toàn, bản đồ dẫn đường chi tiết (hàng trăm
+				Salon)
+			</p>
+			<div class="list-location">
+				<!-- item 1 -->
+				<div class="item" data-aos="fade-up">
+					<a href="#">
+						<div class="over"><img th:src="@{/img/locations/salon-hcm.png}" alt="item 1"/></div>
+						<div class="body-item">
+							<strong>TP. Hồ Chí Minh</strong>
+							<p class="desc">50+ Salon</p>
+						</div>
+					</a>
+				</div>
+				<!-- item 2 -->
+				<div class="item" data-aos="fade-up">
+					<a href="#">
+						<div class="over"><img th:src="@{/img/locations/salon-hanoi.png}" alt="item 1"/></div>
+						<div class="body-item">
+							<strong>Hà Nội</strong>
+							<p class="desc">20+ Salon</p>
+						</div>
+					</a>
+				</div>
+				<!-- item 3 -->
+				<div class="item" data-aos="fade-up">
+					<a href="#">
+						<div class="over"><img th:src="@{/img/locations/salon-danang.png}" alt="item 1"/></div>
+						<div class="body-item">
+							<strong>Đà Nẵng</strong>
+							<p class="desc">2+ Salon</p>
+						</div>
+					</a>
+				</div>
+				<!-- item 4 -->
+				<div class="item" data-aos="fade-up">
+					<a href="#">
+						<div class="over"><img th:src="@{/img/locations/salon-other.png}" alt="item 1"/></div>
+						<div class="body-item">
+							<strong>Các thành phố khác</strong>
+							<p class="desc">4 Dịnh vụ khác</p>
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+
+<footer th:replace="/layout/users/layout::footer"></footer>
+
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+<!-- Initialize Swiper -->
+<script>
+    var swiper = new Swiper(".mySwiper", {
+        effect: "cards",
+        grabCursor: true,
+    });
+</script>
+
+<th:block th:replace="/layout/users/layout::foot"></th:block>
+<th:block th:replace="/layout/users/layout::script_aos"></th:block>
+
+</body>
+</html>

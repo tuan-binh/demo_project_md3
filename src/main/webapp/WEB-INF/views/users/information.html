@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout/users/layout::head">
+</head>
+<body>
+<!-- link css information -->
+<link rel="stylesheet" href="/css/info.css">
+<th:block th:replace="/layout/users/layout::toastify"></th:block>
+
+<!-- header -->
+<header th:replace="/layout/users/layout::header"></header>
+
+<!-- Change Information -->
+<main>
+    <!-- page information -->
+    <div class="information">
+        <h2 class="title">Thông Tin Cá Nhân</h2>
+        <div class="container">
+            <ul class="tab">
+                <li><a class="tab__item active" href="#!">Tất Cả Thông Tin</a></li>
+                <li><a class="tab__item" href="#!">Đổi Tên</a></li>
+                <li><a class="tab__item" href="#!">Đổi Mật Khẩu</a></li>
+            </ul>
+            <div class="page">
+                <div class="page__item action">
+                    <div class="center">
+                        <h3 class="sub-title">Tất Cả Thông Tin</h3>
+                        <label>Họ Và Tên: <span style="color: red">*</span></label>
+                        <input class="oldName" th:value="${session.data_user.fullName}" type="text" disabled/>
+                        <label>Số Điện Thoại: <span style="color: red">*</span></label>
+                        <input class="oldPhone" th:value="${session.data_user.phone}" type="text" disabled/>
+                        <label>Thông tin cá nhân:</label>
+                        <form th:action="@{/user/handleChangeAddress}" method="post">
+                            <div class="choose-city">
+                                <th:block th:each="city:${address}">
+                                    <th:block th:if="${#ctx.session.data_user.address}==${city.address}">
+                                        <input type="radio" name="city" checked th:value="${city.id}"
+                                               th:id="|hanoi${city.id}|"/>
+                                        <label class="btn btn-secondary choose_city active" th:for="|hanoi${city.id}|"
+                                               th:text="${city.address}"></label>
+                                    </th:block>
+                                    <th:block th:unless="${#ctx.session.data_user.address}==${city.address}">
+                                        <input type="radio" name="city" th:value="${city.id}"
+                                               th:id="|hanoi${city.id}|"/>
+                                        <label class="btn btn-secondary choose_city" th:for="|hanoi${city.id}|"
+                                               th:text="${city.address}"></label>
+                                    </th:block>
+                                </th:block>
+                            </div>
+                            <button class="btn btn-primary">Xác Nhận</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="page__item">
+                    <h3 class="sub-title">Thay Đổi Tên</h3>
+                    <div class="center">
+                        <label for="oldName">Họ Và Tên Cũ:</label>
+                        <input class="oldName" th:value="${session.data_user.fullName}" id="oldName" type="text"
+                               disabled>
+                        <form th:action="@{/user/handleChangeName}" method="post" class="newName">
+                            <label for="newName">Họ Và Tên Mới:</label>
+                            <input type="text" name="name" id="newName">
+                            <button class="btn btn-primary">Xác Nhận</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="page__item">
+                    <h3 class="sub-title">Thay Đổi Mật Khẩu</h3>
+                    <div class="center">
+                        <form th:action="@{/user/handleChangePassword}" method="post" class="newPass">
+                            <label for="oldPass">Mật Khẩu Cũ:</label>
+                            <input class="oldPS" id="oldPass" type="text" name="oldPass">
+                            <label for="newPass">Mật Khẩu Mới:</label>
+                            <input type="text" id="newPass" name="pass">
+                            <label for="confirmPass">Xác Nhận Mật Khẩu:</label>
+                            <input type="text" id="confirmPass" name="confirmPass">
+                            <button class="btn btn-primary">Xác Nhận</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<th:block th:if="${error_empty}=='Vui Lòng Lựa Chọn'">
+    <script>
+        Toastify({
+            text: "Vui Lòng Lựa Chọn",
+            gravity: 'top',
+            position: 'center',
+            duration: 3000,
+            style: {
+                background: "#FFFFFF",
+                backgroundImage: "linear-gradient(225deg, #FFFFFF 0%, #6284FF 19%, #FF0000 53%)"
+            }
+        }).showToast();
+    </script>
+</th:block>
+
+<th:block th:if="${message_error}=='Mật Khẩu Phải Ít Nhất 6 Kí Tự'">
+    <script>
+        Toastify({
+            text: "Mật Khẩu Phải Ít Nhất 6 Kí Tự",
+            gravity: 'top',
+            position: 'center',
+            duration: 3000,
+            style: {
+                background: "#FFFFFF",
+                backgroundImage: "linear-gradient(225deg, #FFFFFF 0%, #6284FF 19%, #FF0000 53%)"
+            }
+        }).showToast();
+    </script>
+</th:block>
+<th:block th:if="${message_error}=='Mật Khẩu Không Trùng Nhau'">
+    <script>
+        Toastify({
+            text: "Mật Khẩu Không Trùng Nhau",
+            gravity: 'top',
+            position: 'center',
+            duration: 3000,
+            style: {
+                background: "#FFFFFF",
+                backgroundImage: "linear-gradient(225deg, #FFFFFF 0%, #6284FF 19%, #FF0000 53%)"
+            }
+        }).showToast();
+    </script>
+</th:block>
+<th:block th:if="${error_name}=='Tên Không Được Để Trống'">
+    <script>
+        Toastify({
+            text: "Tên Không Được Để Trống",
+            gravity: 'top',
+            position: 'center',
+            duration: 3000,
+            style: {
+                background: "#FFFFFF",
+                backgroundImage: "linear-gradient(225deg, #FFFFFF 0%, #6284FF 19%, #FF0000 53%)"
+            }
+        }).showToast();
+    </script>
+</th:block>
+<th:block th:if="${error_pass}=='Mật Khẩu Không Được Để Trống'">
+    <script>
+        Toastify({
+            text: "Mật Khẩu Không Được Để Trống",
+            gravity: 'top',
+            position: 'center',
+            duration: 3000,
+            style: {
+                background: "#FFFFFF",
+                backgroundImage: "linear-gradient(225deg, #FFFFFF 0%, #6284FF 19%, #FF0000 53%)"
+            }
+        }).showToast();
+    </script>
+</th:block>
+
+<!-- footer -->
+<footer th:replace="/layout/users/layout::footer"></footer>
+<th:block th:replace="/layout/users/layout::foot"></th:block>
+<script>
+    let allTabs = document.querySelectorAll(".tab__item");
+    let allPages = document.querySelectorAll(".page__item");
+
+
+    let out = document.querySelector(".out");
+
+    allTabs.forEach(function (e, i) {
+        let page = allPages[i];
+        e.onclick = function () {
+            let active = document.querySelector(".tab__item.active");
+            active.classList.remove("active");
+            let action = document.querySelector(".page__item.action");
+            if (active) {
+                action.classList.remove("action");
+            }
+
+            e.classList.add("active");
+            page.classList.add("action");
+        };
+    });
+
+    let city = document.querySelectorAll(".choose-city .choose_city");
+    city.forEach(function (e) {
+        e.onclick = function () {
+            let active = document.querySelector(".choose-city .btn.active");
+            if (active) {
+                active.classList.remove("active");
+            }
+            e.classList.add("active");
+        };
+    });
+</script>
+</body>
+</html>

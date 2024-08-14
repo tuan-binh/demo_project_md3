@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout/users/layout::head">
+
+</head>
+<body>
+<style>
+	
+	main {
+		padding: 100px;
+	}
+	
+	.title {
+		text-align: center;
+	}
+	
+	.list-favorite {
+		padding: 100px 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 15px;
+	}
+	
+	.list-favorite .item {
+		width: calc(100% / 5.4);
+		height: 350px;
+		margin-bottom: 15px;
+		position: relative;
+	}
+	
+	.list-favorite .item img {
+		width: 100%;
+		height: 100%;
+		border-radius: 12px;
+		display: block;
+		object-fit: cover;
+	}
+	
+	.empty {
+		margin: auto;
+		color: #999898;
+	}
+	
+	.item .close {
+		opacity: 0;
+		position: absolute;
+		inset: 0;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 60px;
+		color: red;
+		background: rgba(0, 0, 0, 0.35);
+		border-radius: 12px;
+		transition: all 0.3s ease;
+	}
+	
+	.item .close:hover {
+		opacity: 1;
+	}
+</style>
+<th:block th:replace="/layout/users/layout::toastify"></th:block>
+
+<!-- header -->
+<header th:replace="/layout/users/layout::header"></header>
+
+<!-- show list favourite -->
+<main>
+	<div class="container">
+		<h3 class="title">
+			Danh Sách Yêu Thích Kiểu Tóc<br>
+			<b>XU HƯỚNG TÓC HOT NHẤT</b>
+		</h3>
+		<th:block th:if="${#ctx.session.data_user.favourite.size()}>0">
+			<div class="list-favorite">
+				<div class="item" th:each="img:${session.data_user.favourite}">
+					<img th:src="@{|/img/hairStyle/${img.url}|}" alt="">
+					<a th:href="@{/hair/delete/{id}(id=${img.id})}" class="close">
+						<i class="fa-regular fa-circle-xmark"></i>
+					</a>
+				</div>
+			</div>
+		</th:block>
+		<th:block th:unless="${#ctx.session.data_user.favourite.size()}>0">
+			<div class="list-favorite">
+				<h3 class="empty">Your Favorite empty</h3>
+			</div>
+		</th:block>
+	</div>
+</main>
+
+<!-- footer -->
+<footer th:replace="/layout/users/layout::footer"></footer>
+<th:block th:replace="/layout/users/layout::foot"></th:block>
+
+</body>
+</html>

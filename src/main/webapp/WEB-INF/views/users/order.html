@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout/users/layout::head">
+</head>
+<body>
+<link rel="stylesheet" th:href="@{/css/order.css}">
+<th:block th:replace="/layout/users/layout::toastify"></th:block>
+
+
+<!-- header -->
+<header th:replace="/layout/users/layout::header"></header>
+
+<!-- form order -->
+<main>
+	<!-- carousel -->
+	<div class="banner">
+		<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+			<div class="carousel-inner">
+				<div class="carousel-item active">
+					<img th:src="@{/img/slide/slide-1.jpg}" class="d-block w-100" alt="..."/>
+				</div>
+				<div class="carousel-item">
+					<img th:src="@{/img/slide/slide-2.jpg}" class="d-block w-100" alt="..."/>
+				</div>
+				<div class="carousel-item">
+					<img th:src="@{/img/slide/slide-3.jpg}" class="d-block w-100" alt="..."/>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- form user no acccount -->
+	<th:block th:if="${#ctx.session.data_user}==null">
+		<form th:action="@{/handleOrder/handleOrderNoAccount}" method="post" class="flex-form" id="hash_form"
+					data-aos="fade-up">
+			<!-- option -->
+			<div class="order" data-aos="fade-up">
+				<div class="item">
+					<h2 class="title">Đặt Lịch Giữ Chỗ</h2>
+					<input type="hidden" name="phone" th:value="${phone}">
+					<p class="info">SĐT: <span class="tel" th:text="${phone}"></span></p>
+					<h5>1. Chọn địa điểm</h5>
+					<div class="choose-city">
+						<th:block th:each="city:${address}">
+							<th:block th:if="${city.status}">
+								<input type="radio" name="city" th:value="${city.id}" th:id="|city${city.id}|"/>
+								<label class="btn btn-secondary choose_city" th:for="|city${city.id}|"
+											 th:text="${city.address}"></label>
+							</th:block>
+						</th:block>
+					</div>
+					<h5>2. Chọn dịnh vụ</h5>
+					<div class="choose-service">
+						<th:block th:each="service:${types}">
+							<th:block th:if="${service.status}">
+								<input type="radio" name="service" th:value="${service.id}" th:id="|service${service.id}|"/>
+								<label class="btn btn-secondary choose_service" th:for="|service${service.id}|"
+											 th:text="${service.typeName}"></label>
+							</th:block>
+						</th:block>
+					</div>
+					<div class="choose-your-time">
+						<h5>3. Chọn thời gian</h5>
+						<input type="date" name="calender" th:value="${now}"/>
+						<div class="calender-time">
+							<th:block th:each="time:${times}">
+								<th:block th:if="${time.status}">
+									<input type="radio" name="timeOrder" th:value="${time.id}" th:id="|time${time.id}|"/>
+									<label class="btn btn-outline-warning choose_time" th:for="|time${time.id}|"
+												 th:text="${time.time}"></label>
+								</th:block>
+							</th:block>
+						</div>
+					</div>
+					<div class="actionDone">
+						<button type="submit" class="btn btn-warning done">Hoàn tất</button>
+					</div>
+				</div>
+			</div>
+			<div class="select_barber" data-aos="fade-up">
+				<h2><i class="fa-solid fa-users"></i> Lựa Chọn Barber</h2>
+				<!-- option barber -->
+				<div class="flex-barber">
+					<!-- barber -->
+					<th:block th:each="barber:${barbers}">
+						<th:block th:if="${barber.status}">
+							<input type="radio" name="yourBarber" th:value="${barber.id}" th:id="|barber${barber.id}|">
+							<label class="barber" th:for="|barber${barber.id}|">
+								<img th:src="|/img/barber/${barber.urlAvatar}|" alt=""/>
+							</label>
+						</th:block>
+					</th:block>
+				</div>
+			</div>
+		</form>
+	</th:block>
+	<!-- form user -->
+	<th:block th:unless="${#ctx.session.data_user}==null">
+		<form th:action="@{/handleOrder/handleOrderHasAccount}" method="post" class="flex-form" data-aos="fade-up">
+			<!-- option -->
+			<div class="order" data-aos="fade-up">
+				<div class="item" data-aos="fade-up">
+					<h2 class="title">Đặt Lịch Giữ Chỗ</h2>
+					<p class="info">SĐT: <span class="tel" th:text="${phone}"></span></p>
+					<h5>1. Chọn địa điểm</h5>
+					<div class="choose-city">
+						<th:block th:each="city:${address}">
+							<th:block th:if="${city.status}">
+								<input type="radio" name="city" th:value="${city.id}" th:id="|myCity${city.id}|"/>
+								<label class="btn btn-secondary choose_city" th:for="|myCity${city.id}|"
+											 th:text="${city.address}"></label>
+							</th:block>
+						</th:block>
+					</div>
+					<h5>2. Chọn dịnh vụ</h5>
+					<div class="choose-service">
+						<th:block th:each="service:${types}">
+							<th:block th:if="${service.status}">
+								<input type="radio" name="service" th:value="${service.id}" th:id="|myService${service.id}|"/>
+								<label class="btn btn-secondary choose_service" th:for="|myService${service.id}|"
+											 th:text="${service.typeName}"></label>
+							</th:block>
+						</th:block>
+					</div>
+					<div class="choose-your-time">
+						<h5>3. Chọn thời gian</h5>
+						<input type="date" name="calender" th:value="${now}"/>
+						<div class="calender-time">
+							<th:block th:each="time:${times}">
+								<th:block th:if="${time.status}">
+									<input type="radio" name="timeOrder" th:value="${time.id}" th:id="|myTime${time.id}|"/>
+									<label class="btn btn-outline-warning choose_time" th:for="|myTime${time.id}|"
+												 th:text="${time.time}"></label>
+								</th:block>
+							</th:block>
+						</div>
+					</div>
+					<div class="actionDone">
+						<button type="submit" class="btn btn-warning done">Hoàn tất</button>
+					</div>
+				</div>
+			</div>
+			<div class="select_barber" data-aos="fade-up">
+				<h2><i class="fa-solid fa-users"></i> Lựa Chọn Barber</h2>
+				<!-- option barber -->
+				<div class="flex-barber">
+					<!-- barber -->
+					<th:block th:each="barber:${barbers}">
+						<th:block th:if="${barber.status}">
+							<input type="radio" name="yourBarber" th:value="${barber.id}" th:id="|myBarber${barber.id}|">
+							<label class="barber" th:for="|myBarber${barber.id}|">
+								<img th:src="@{${barber.urlAvatar}}" alt=""/>
+							</label>
+						</th:block>
+					</th:block>
+				</div>
+			</div>
+		</form>
+	</th:block>
+
+</main>
+
+<!-- Toastify -->
+<th:block th:if="${error}=='Vui Lòng Lựa Chọn Đầy Đủ'">
+	<script>
+		Toastify({
+			text: "Vui Lòng Lựa Chọn Đầy Đủ",
+			gravity: 'top',
+			position: 'center',
+			duration: 3000,
+			style: {
+				background: "#FFFFFF",
+				backgroundImage: "linear-gradient(225deg, #FFFFFF 0%, #6284FF 19%, #FF0000 53%)"
+			}
+		}).showToast();
+	</script>
+</th:block>
+
+
+<!-- footer -->
+<footer th:replace="/layout/users/layout::footer"></footer>
+<th:block th:replace="/layout/users/layout::foot"></th:block>
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+<!-- Initialize Swiper -->
+<script>
+	var swiper = new Swiper(".mySwiper", {
+		effect: "cards",
+		grabCursor: true,
+	});
+</script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+	let city = document.querySelectorAll(".choose-city .choose_city");
+	city.forEach(function (e) {
+		e.onclick = function () {
+			let active = document.querySelector(".choose-city .btn.active");
+			if (active) {
+				active.classList.remove("active");
+			}
+			e.classList.add("active");
+		};
+	});
+	
+	let service = document.querySelectorAll(".choose-service .choose_service");
+	service.forEach(function (e) {
+		e.onclick = function () {
+			let active = document.querySelector(".choose-service .btn.active");
+			if (active) {
+				active.classList.remove("active");
+			}
+			e.classList.add("active");
+		};
+	});
+	
+	let timeOrder = document.querySelectorAll(".choose-your-time .choose_time");
+	timeOrder.forEach(function (e) {
+		e.onclick = function () {
+			let active = document.querySelector(".choose-your-time .btn.active");
+			if (active) {
+				active.classList.remove("active");
+			}
+			e.classList.add("active");
+		};
+	});
+	
+	let barbers = document.querySelectorAll(".flex-barber .barber");
+	barbers.forEach(function (e) {
+		e.onclick = function () {
+			let active = document.querySelector(".barber.active_barber");
+			if (active) {
+				active.classList.remove("active_barber");
+			}
+			e.classList.add("active_barber");
+			// valueCity = e.innerText;
+		};
+	});
+</script>
+<th:block th:replace="/layout/users/layout::script_aos"></th:block>
+</body>
+</html>

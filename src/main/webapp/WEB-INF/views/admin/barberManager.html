@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout/admin/layout::head">
+</head>
+<body>
+<style>
+    table img {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+    }
+</style>
+<div class="wrapper">
+	<th:block th:replace="/layout/admin/layout::sidebar"></th:block>
+	<div class="main">
+		<th:block th:replace="/layout/admin/layout::navbar"></th:block>
+		<main class="content">
+			<div class="container-fluid p-0">
+				<div class="card">
+					<div class="card-header">
+						<h3 class="card-title">Barber Manager</h3>
+						<nav class="navbar navbar-expand-lg bg-light">
+							<div class="container-fluid">
+								<a class="navbar-brand addNewBarber" href="#" data-toggle="modal" data-target="#addModal">
+									<button type="button" class="btn btn-success">+ Create new Barber</button>
+								</a>
+								<form th:action="@{/admin/barber}" class="d-flex" role="search">
+									<input type="hidden" name="page" th:value="${page}">
+									<input type="hidden" name="size" th:value="${size}">
+									<input class="form-control me-2 fst-italic" type="search"
+										   th:value="${search}"
+									       name="search"
+									       placeholder="Enter user's name... "
+									       aria-label="Search">
+									<button class="btn btn-outline-success" type="submit">Search</button>
+								</form>
+							</div>
+						</nav>
+					</div>
+					<!-- /.card-header -->
+					<div class="card-body">
+						<table id="example1" class="table table-bordered table-striped text-center">
+							<thead>
+							<tr>
+								<th>#</th>
+								<th>Name</th>
+								<th>Avatar</th>
+								<th>Status</th>
+								<th>Actions</th>
+							</tr>
+							</thead>
+							<tbody>
+							<tr th:each="barber,loop:${barbers}">
+								<td th:text="${page * size + loop.count}"></td>
+								<td th:text="${barber.barberName}"></td>
+								<td><img style="width: 100px;height: 100px;object-fit: cover;border-radius: 50%" th:src="@{${barber.urlAvatar}}" alt=""></td>
+								<td th:text="${barber.status}?'Đang làm việc':'Đã nghỉ việc'"></td>
+								<td>
+									<th:block th:if="${barber.status}">
+										<a class="btn btn-danger" th:href="@{'/admin/barber/'+${barber.id}+'/status'}">
+											<i class="fa-solid fa-lock"></i>
+										</a>
+									</th:block>
+									<th:block th:unless="${barber.status}">
+										<a class="btn btn-primary" th:href="@{'/admin/barber/'+${barber.id}+'/status'}">
+											<i class="fa-solid fa-lock-open"></i>
+										</a>
+									</th:block>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+					<nav th:if="${totalPages > 0}" aria-label="Page navigation example ">
+						<ul class="pagination float-end mx-4">
+							<!-- button previous -->
+							<li th:class="${page == 0 ?'page-item disabled':'page-item'}">
+								<a class="page-link" th:href="@{'/admin/barber?page='+${page - 1} + '&search='+${search}}">Previous</a>
+							</li>
+							<!-- button number -->
+							<th:block th:each="number : ${#numbers.sequence(1,totalPages)}">
+								<li th:class="${number == (page+1) ? 'page-item active':'page-item'}">
+									<a class="page-link" th:href="@{'/admin/barber?page='+${number - 1} + '&search='+${search}}" th:text="${number}"></a>
+								</li>
+							</th:block>
+							<!-- button next -->
+							<li th:class="${(page+1) == totalPages ?'page-item disabled':'page-item'}">
+								<a class="page-link" th:href="@{'/admin/barber?page='+${page + 1} + '&search='+${search}}">Next</a>
+							</li>
+						</ul>
+					</nav>
+					<!-- /.card-body -->
+				</div>
+
+			</div>
+		</main>
+	</div>
+</div>
+<!-- script add barber -->
+<script>
+    let buttonAdd = document.querySelector(".addNewBarber");
+    buttonAdd.onclick = function () {
+        let tbody = document.querySelector(".table tbody");
+        let tr = document.createElement("tr");
+        tr.innerHTML = `<td>*</td>
+							   <td><input type="text" name="name"/></td>
+							   <td><input type="file" name="avatar"></td>
+							   <td>Đã làm việc</td>
+							   <td><button class="btn btn-primary" onclick="handleAdd()">ADD</button></td>`;
+        tbody.appendChild(tr);
+    }
+
+    async function handleAdd() {
+        let formData = new FormData();
+        formData.append("name", document.querySelector("input[name='name']").value);
+        formData.append("avatar", document.querySelector("input[name='avatar']").files[0]);
+
+        await fetch('http://localhost:8080/admin/barber', {
+            method: 'POST',
+            body: formData,
+        }).then((resp) => {
+            if (resp.status === 200) {
+                window.location.reload();
+            }
+        })
+    }
+</script>
+
+
+<th:block th:replace="/layout/admin/layout::script"></th:block>
+
+</body>
+</html>
